@@ -10,10 +10,30 @@ final class SecureKeychainService {
     private static let messageKey = "messageKey"
 
     private var options: [CFString: Any] {
-        [kSecClass: kSecClassGenericPassword,
-   kSecAttrService: Self.service,
-   kSecAttrAccount: Self.messageKey,
-kSecAttrAccessible: kSecAttrAccessibleAlways]
+        var result = [kSecClass: kSecClassGenericPassword,
+                kSecAttrService: Self.service,
+                kSecAttrAccount: Self.messageKey,
+         kSecAttrSynchronizable: kCFBooleanTrue ?? true] as [CFString : Any]
+
+#if targetEnvironment(simulator)
+
+        result[kSecAttrAccessible] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+
+#else
+
+        guard let accessControl = SecAccessControlCreateWithFlags(kCFAllocatorDefault,
+                                                                  kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly,
+                                                                  .userPresence,
+                                                                  nil)
+        else {
+            fatalError("Unable to setup access control for keychain option")
+        }
+
+        result[kSecAttrAccessControl] = accessControl
+
+#endif
+
+        return result as [CFString : Any]
     }
 }
 

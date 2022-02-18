@@ -38,7 +38,8 @@ extension SandboxDirectoryService: FileService {
     func save(message: String) {
         let filePath = fileFullPath()
         do {
-            try message.write(to: filePath, atomically: true, encoding: .utf8)
+            let data = message.data(using: .utf8)
+            try data?.write(to: filePath, options: [.atomic, .completeFileProtection])
         } catch {
             print("Cannot save message to file \(filePath.absoluteString): \(error)")
         }
