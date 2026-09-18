@@ -6,7 +6,6 @@ struct StorageLabApp: App {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = UIColor(AppColors.navigationBackground)
-        appearance.backgroundImage = AppImages.navigationImage
 
         appearance.titleTextAttributes = [
             .foregroundColor: UIColor(AppColors.navigationForeground)
@@ -22,7 +21,6 @@ struct StorageLabApp: App {
                 MenuView()
             }
             .tint(AppColors.navigationForeground)
-            .preferredColorScheme(.dark)
         }
     }
 }

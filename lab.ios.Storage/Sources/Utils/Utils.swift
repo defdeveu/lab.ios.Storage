@@ -49,12 +49,12 @@ struct StorageCardButtonStyle: ButtonStyle {
 // MARK: - Colors
 
 enum AppColors {
-    static let navigationBackground = Color(UIColor(named: "NavigationBkgdColor") ?? .black)
-    static let navigationForeground = Color(UIColor(named: "NavigationFrgdColor") ?? .orange)
-    static let buttonBackground = Color(UIColor(named: "ButtonColor") ?? .black)
-    static let buttonOverlay = Color(UIColor(named: "ButtonOverlayColor") ?? .orange)
-    static let buttonText = Color(UIColor(named: "ButtonTextColor") ?? .white)
-    static let textInputOverlay = Color(UIColor(named: "TextInputOverlayColor") ?? .white)
+    static let navigationBackground = Color(uiColor: .systemBackground)
+    static let navigationForeground = Color.orange
+    static let buttonBackground = Color(uiColor: .secondarySystemBackground)
+    static let buttonOverlay = Color.orange
+    static let buttonText = Color.primary
+    static let textInputOverlay = Color.secondary
 }
 
 // MARK: - Strings
@@ -66,6 +66,5 @@ enum AppStrings {
 // MARK: - Images
 
 enum AppImages {
-    static let navigationImage = UIImage(named: "bg-banner.ddd.2108.dark")
     static let appTitleImage = Image("logo.ddd.stamp.1905")
 }
