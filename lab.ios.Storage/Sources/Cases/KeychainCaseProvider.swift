@@ -1,25 +1,18 @@
 import Foundation
 
-class KeychainCaseProvider {
-    @Published private var message: String?
+@MainActor
+final class KeychainCaseProvider: CaseProviding {
+    private let keychainService: any KeychainService
 
-    private let keychainService: KeychainService
-
-    init(keychainService: KeychainService = AppRepository.shared.keychainService) {
+    init(keychainService: any KeychainService = AppRepository.shared.keychainService) {
         self.keychainService = keychainService
     }
-}
 
-extension KeychainCaseProvider: CaseProviding {
-    var messagePublisher: Published<String?>.Publisher {
-        $message
+    func save(message: String) throws {
+        try keychainService.save(message: message)
     }
 
-    func save(message: String) {
-        keychainService.save(message: message)
-    }
-
-    func readMessage() {
-        message = keychainService.readMessage()
+    func readMessage() throws -> String? {
+        try keychainService.readMessage()
     }
 }

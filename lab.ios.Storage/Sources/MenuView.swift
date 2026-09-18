@@ -2,49 +2,88 @@ import SwiftUI
 
 struct MenuView: View {
     var body: some View {
-        VStack(spacing: 20) {
-            scenarioLink("User defaults", caseProvider: UserDefaultsCaseProvider())
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                Text("Store and retrieve the same message using each API, then inspect how the result is represented on the device.")
+                    .font(.body)
+                    .foregroundStyle(.secondary)
+                    .padding(.bottom, 8)
 
-            scenarioLink("Database", caseProvider: DatabaseCaseProvider())
-
-            scenarioLink("File", caseProvider: FileCaseProvider())
-
-            scenarioLink("Keychain", caseProvider: KeychainCaseProvider())
+                scenarioLink(
+                    "UserDefaults",
+                    detail: "Preference storage",
+                    caseProvider: UserDefaultsCaseProvider()
+                )
+                scenarioLink(
+                    "Core Data",
+                    detail: "SQLite-backed object storage",
+                    caseProvider: DatabaseCaseProvider()
+                )
+                scenarioLink(
+                    "File",
+                    detail: "A document in the application sandbox",
+                    caseProvider: FileCaseProvider()
+                )
+                scenarioLink(
+                    "Keychain",
+                    detail: "A generic-password item",
+                    caseProvider: KeychainCaseProvider()
+                )
+            }
+            .padding(20)
         }
-        .padding()
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { appTitle() }
     }
 
     @ToolbarContentBuilder
     private func appTitle() -> some ToolbarContent {
-        ToolbarItem(placement: .navigationBarLeading) {
-            HStack {
+        ToolbarItem(placement: .principal) {
+            HStack(spacing: 10) {
                 AppImages.appTitleImage
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .scaledToFit()
+                    .frame(height: 30)
                     .colorInvert()
-                // TODO colorInvert as per the scheme
+                    .accessibilityHidden(true)
                 Text(AppStrings.appTitle)
-                    .font(.title.bold())
-                    .foregroundColor(AppColors.navigationForeground)
+                    .font(.headline.bold())
+                    .foregroundStyle(AppColors.navigationForeground)
             }
-            .padding(.bottom, 8)
         }
     }
 
-    @ViewBuilder
-    private func scenarioLink(_ title: String,
-                              caseProvider: CaseProviding) -> some View {
-        NavigationLink(destination: CaseView(viewModel: CaseViewModel(caseProvider: caseProvider))) {
-            Text(title)
+    private func scenarioLink(
+        _ title: String,
+        detail: String,
+        caseProvider: any CaseProviding
+    ) -> some View {
+        NavigationLink {
+            CaseView(viewModel: CaseViewModel(caseProvider: caseProvider))
+                .navigationTitle(title)
+        } label: {
+            HStack(spacing: 14) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.headline)
+                    Text(detail)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.footnote.bold())
+            }
+            .frame(maxWidth: .infinity, minHeight: 56)
+            .contentShape(Rectangle())
         }
-        .buttonStyle(SolidButtonStyle())
+        .buttonStyle(StorageCardButtonStyle())
     }
 }
 
-struct MenuView_Previews: PreviewProvider {
-    static var previews: some View {
+#Preview {
+    NavigationStack {
         MenuView()
     }
+    .preferredColorScheme(.dark)
 }

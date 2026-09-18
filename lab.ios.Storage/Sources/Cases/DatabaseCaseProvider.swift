@@ -1,25 +1,18 @@
 import Foundation
 
-class DatabaseCaseProvider {
-    @Published private var message: String?
+@MainActor
+final class DatabaseCaseProvider: CaseProviding {
+    private let databaseService: any DatabaseService
 
-    private let databaseService: DatabaseService
-
-    init(databaseService: DatabaseService = AppRepository.shared.databaseService) {
+    init(databaseService: any DatabaseService = AppRepository.shared.databaseService) {
         self.databaseService = databaseService
     }
-}
 
-extension DatabaseCaseProvider: CaseProviding {
-    var messagePublisher: Published<String?>.Publisher {
-        $message
+    func save(message: String) throws {
+        try databaseService.save(message: message)
     }
 
-    func save(message: String) {
-        databaseService.save(message: message)
-    }
-
-    func readMessage() {
-        message = databaseService.readMessage()
+    func readMessage() throws -> String? {
+        try databaseService.readMessage()
     }
 }

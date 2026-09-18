@@ -1,53 +1,66 @@
 import Foundation
+import Security
 
+@MainActor
 protocol KeychainService {
-    func save(message: String)
-    func readMessage() -> String?
+    func save(message: String) throws
+    func readMessage() throws -> String?
 }
 
+@MainActor
 final class SecureKeychainService {
-    private static let service = "com.mycompany.keychain"
-    private static let messageKey = "messageKey"
+    private let service: String
+    private let account: String
 
-    private var options: [CFString: Any] {
-        [kSecClass: kSecClassGenericPassword,
-   kSecAttrService: Self.service,
-   kSecAttrAccount: Self.messageKey,
-kSecAttrAccessible: kSecAttrAccessibleAlways]
+    init(
+        service: String = "dev.def.labs.storage",
+        account: String = "message"
+    ) {
+        self.service = service
+        self.account = account
+    }
+
+    private var identityQuery: [CFString: Any] {
+        [
+            kSecClass: kSecClassGenericPassword,
+            kSecAttrService: service,
+            kSecAttrAccount: account
+        ]
     }
 }
 
 extension SecureKeychainService: KeychainService {
-    func save(message: String) {
-        var query = options
-        let data = message.data(using: .utf8)
+    func save(message: String) throws {
+        guard let data = message.data(using: .utf8) else {
+            throw CocoaError(.fileWriteInapplicableStringEncoding)
+        }
 
-        query[kSecValueData] = data
+        var addQuery = identityQuery
+        KeychainPolicy.storageAttributes.forEach { addQuery[$0.key] = $0.value }
+        addQuery[kSecValueData] = data
 
-        let addResult = SecItemAdd(query as CFDictionary, nil)
+        let addResult = SecItemAdd(addQuery as CFDictionary, nil)
 
         switch addResult {
         case errSecDuplicateItem:
-            print("Item '\(Self.messageKey)' is already present in the storage")
+            var updatedAttributes = KeychainPolicy.storageAttributes
+            updatedAttributes[kSecValueData] = data
+            let status = SecItemUpdate(
+                identityQuery as CFDictionary,
+                updatedAttributes as CFDictionary
+            )
+            guard status == errSecSuccess else {
+                throw KeychainServiceError.operationFailed(status)
+            }
         case errSecSuccess:
             return
         default:
-            fatalError("Cannot store message")
-        }
-
-        // In case item is present already, update it
-        let updateResult = SecItemUpdate(query as CFDictionary, [kSecValueData: data] as CFDictionary)
-
-        switch updateResult {
-        case errSecSuccess:
-            return
-        default:
-            fatalError("Cannot update message \(updateResult as OSStatus)")
+            throw KeychainServiceError.operationFailed(addResult)
         }
     }
 
-    func readMessage() -> String? {
-        var query = options
+    func readMessage() throws -> String? {
+        var query = identityQuery
 
         query[kSecReturnData] = kCFBooleanTrue
         query[kSecMatchLimit] = kSecMatchLimitOne
@@ -58,14 +71,34 @@ extension SecureKeychainService: KeychainService {
         switch status {
         case errSecSuccess:
             guard let data = result as? Data else {
-                fatalError("Cannot read message")
+                throw KeychainServiceError.invalidData
             }
             return String(data: data, encoding: .utf8)
         case errSecItemNotFound:
             return nil
         default:
-            print("Cannot read message - \(status)")
-            fatalError("Cannot read message")
+            throw KeychainServiceError.operationFailed(status)
+        }
+    }
+}
+
+enum KeychainPolicy {
+    static var storageAttributes: [CFString: Any] {
+        [kSecAttrAccessible: kSecAttrAccessibleAfterFirstUnlock]
+    }
+}
+
+enum KeychainServiceError: LocalizedError {
+    case invalidData
+    case operationFailed(OSStatus)
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidData:
+            "The Keychain returned data in an unexpected format."
+        case let .operationFailed(status):
+            SecCopyErrorMessageString(status, nil) as String?
+                ?? "The Keychain operation failed with status \(status)."
         }
     }
 }

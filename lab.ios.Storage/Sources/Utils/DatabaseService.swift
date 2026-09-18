@@ -1,11 +1,13 @@
 import Foundation
 import CoreData
 
+@MainActor
 protocol DatabaseService {
-    func save(message: String)
-    func readMessage() -> String?
+    func save(message: String) throws
+    func readMessage() throws -> String?
 }
 
+@MainActor
 final class CoreDataService {
     private static let messageKey = "message"
     private static let messageEntityName = String(describing: MessageEntity.self)
@@ -15,50 +17,44 @@ final class CoreDataService {
         self.persistentContainer = persistentContainer
     }
 
-    private func saveContext() {
+    private func saveContext() throws {
         let context = persistentContainer.viewContext
         if context.hasChanges {
-            do {
-                try context.save()
-            } catch let error as NSError {
-                fatalError("Cannot save context \(error), \(error.userInfo)")
-            }
+            try context.save()
         }
     }
 
-    private func getMessageObject() -> NSManagedObject? {
+    private func getMessageObject() throws -> NSManagedObject? {
         let context = persistentContainer.viewContext
         let fetchResult = NSFetchRequest<NSManagedObject>(entityName: Self.messageEntityName)
-
-        do {
-            return try context.fetch(fetchResult).first
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-            return nil
-        }
+        fetchResult.fetchLimit = 1
+        return try context.fetch(fetchResult).first
     }
 }
 
 extension CoreDataService: DatabaseService {
-    func save(message: String) {
+    func save(message: String) throws {
         let messageObject: NSManagedObject
 
-        if let object = getMessageObject() {
+        if let object = try getMessageObject() {
             messageObject = object
         } else {
             let context = persistentContainer.viewContext
-            let entity = NSEntityDescription.entity(forEntityName: Self.messageEntityName,
-                                                    in: context)!
+            guard let entity = NSEntityDescription.entity(
+                forEntityName: Self.messageEntityName,
+                in: context
+            ) else {
+                throw CocoaError(.persistentStoreInvalidType)
+            }
             messageObject = NSManagedObject(entity: entity, insertInto: context)
         }
 
         messageObject.setValue(message, forKey: Self.messageKey)
-
-        saveContext()
+        try saveContext()
     }
 
-    func readMessage() -> String? {
-        guard let messageObject = getMessageObject() else { return nil }
+    func readMessage() throws -> String? {
+        guard let messageObject = try getMessageObject() else { return nil }
         return messageObject.value(forKey: Self.messageKey) as? String
     }
 }
