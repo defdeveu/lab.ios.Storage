@@ -42,9 +42,10 @@ struct MenuView: View {
             HStack(spacing: 10) {
                 AppImages.appTitleImage
                     .resizable()
+                    .renderingMode(.template)
                     .scaledToFit()
                     .frame(height: 30)
-                    .colorInvert()
+                    .foregroundStyle(AppColors.navigationForeground)
                     .accessibilityHidden(true)
                 Text(AppStrings.appTitle)
                     .font(.headline.bold())
@@ -81,7 +82,14 @@ struct MenuView: View {
     }
 }
 
-#Preview {
+#Preview("Light") {
+    NavigationStack {
+        MenuView()
+    }
+    .preferredColorScheme(.light)
+}
+
+#Preview("Dark") {
     NavigationStack {
         MenuView()
     }
