@@ -13,7 +13,11 @@ struct SolidButtonStyle: ButtonStyle {
                 .minimumScaleFactor(0.5)
             Spacer()
         }
-        .foregroundColor(AppColors.buttonText)
+        .foregroundStyle(AppColors.buttonText)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(AppColors.buttonBackground)
+        )
         .font(.headline)
         .overlay(
             RoundedRectangle(cornerRadius: 20)
@@ -24,11 +28,27 @@ struct SolidButtonStyle: ButtonStyle {
     }
 }
 
+struct StorageCardButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .foregroundStyle(AppColors.buttonText)
+            .background(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(AppColors.buttonBackground)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            .stroke(AppColors.buttonOverlay, lineWidth: 1)
+                    }
+            )
+            .opacity(configuration.isPressed ? 0.75 : 1)
+    }
+}
+
 // MARK: - Colors
 
 enum AppColors {
-    // TODO color scheme dependency
-    
     static let navigationBackground = Color(UIColor(named: "NavigationBkgdColor") ?? .black)
     static let navigationForeground = Color(UIColor(named: "NavigationFrgdColor") ?? .orange)
     static let buttonBackground = Color(UIColor(named: "ButtonColor") ?? .black)

@@ -1,26 +1,16 @@
-//
-//  lab_ios_StorageApp.swift
-//  lab.ios.Storage
-//
-//  Created by Yuliia Hanol on 18/02/2022.
-//
-
 import SwiftUI
 
 @main
-struct lab_ios_StorageApp: App {
+struct StorageLabApp: App {
     init() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = UIColor(AppColors.navigationBackground)
         appearance.backgroundImage = AppImages.navigationImage
 
-        let attrs: [NSAttributedString.Key: Any] = [
+        appearance.titleTextAttributes = [
             .foregroundColor: UIColor(AppColors.navigationForeground)
         ]
-
-        appearance.largeTitleTextAttributes = attrs
-        appearance.titleTextAttributes = attrs
 
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().standardAppearance = appearance
@@ -28,10 +18,10 @@ struct lab_ios_StorageApp: App {
 
     var body: some Scene {
         WindowGroup {
-            NavigationView {
+            NavigationStack {
                 MenuView()
             }
-            .navigationViewStyle(.stack)
+            .tint(AppColors.navigationForeground)
             .preferredColorScheme(.dark)
         }
     }

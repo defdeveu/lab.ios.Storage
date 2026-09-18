@@ -1,8 +1,7 @@
 import Foundation
 
-protocol CaseProviding {
-    var messagePublisher: Published<String?>.Publisher { get }
-
-    func save(message: String)
-    func readMessage()
+@MainActor
+protocol CaseProviding: AnyObject {
+    func save(message: String) throws
+    func readMessage() throws -> String?
 }

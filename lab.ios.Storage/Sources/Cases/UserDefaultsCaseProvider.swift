@@ -1,27 +1,19 @@
 import Foundation
 
-class UserDefaultsCaseProvider {
+@MainActor
+final class UserDefaultsCaseProvider: CaseProviding {
     private static let messageKey = "messageKey"
+    private let userDefaultsService: any UserDefaultsService
 
-    @Published private var message: String?
-
-    private let userDefaultsService: UserDefaultsService
-
-    init(userDefaultsService: UserDefaultsService = AppRepository.shared.userDefaultsService) {
+    init(userDefaultsService: any UserDefaultsService = AppRepository.shared.userDefaultsService) {
         self.userDefaultsService = userDefaultsService
     }
-}
 
-extension UserDefaultsCaseProvider: CaseProviding {
-    var messagePublisher: Published<String?>.Publisher {
-        $message
-    }
-
-    func save(message: String) {
+    func save(message: String) throws {
         userDefaultsService.set(message, forKey: Self.messageKey)
     }
 
-    func readMessage() {
-        message = userDefaultsService.string(forKey: Self.messageKey)
+    func readMessage() throws -> String? {
+        userDefaultsService.string(forKey: Self.messageKey)
     }
 }

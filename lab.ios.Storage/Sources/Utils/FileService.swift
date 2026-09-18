@@ -1,8 +1,9 @@
 import Foundation
 
+@MainActor
 protocol FileService {
-    func save(message: String)
-    func readMessage() -> String?
+    func save(message: String) throws
+    func readMessage() throws -> String?
 }
 
 enum SandboxDirectoryType {
@@ -12,48 +13,47 @@ enum SandboxDirectoryType {
 
 final class SandboxDirectoryService {
     private static let fileName = "message.txt"
-    private let type: SandboxDirectoryType
+    static let writeOptions: Data.WritingOptions = [.atomic, .completeFileProtection]
+
+    private let directory: URL
 
     init(type: SandboxDirectoryType) {
-        self.type = type
-    }
-
-    private func fileFullPath() -> URL {
-        let path: URL
         switch type {
         case .persistent:
-            guard let docPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            guard let directory = FileManager.default.urls(
+                for: .documentDirectory,
+                in: .userDomainMask
+            ).first else {
                 fatalError("Cannot get document path")
             }
-            path = docPath
+            self.directory = directory
         case .temporary:
-            path = FileManager.default.temporaryDirectory
+            directory = FileManager.default.temporaryDirectory
         }
+    }
 
-        return path.appendingPathComponent(Self.fileName)
+    init(directory: URL) {
+        self.directory = directory
+    }
+
+    private var fileURL: URL {
+        directory.appendingPathComponent(Self.fileName)
     }
 }
 
 extension SandboxDirectoryService: FileService {
-    func save(message: String) {
-        let filePath = fileFullPath()
-        do {
-            let data = message.data(using: .utf8)
-            try data?.write(to: filePath, options: [.atomic, .completeFileProtection])
-        } catch {
-            print("Cannot save message to file \(filePath.absoluteString): \(error)")
+    func save(message: String) throws {
+        guard let data = message.data(using: .utf8) else {
+            throw CocoaError(.fileWriteInapplicableStringEncoding)
         }
+        try data.write(to: fileURL, options: Self.writeOptions)
     }
 
-    func readMessage() -> String? {
-        let filePath = fileFullPath()
-
-        do {
-            let data = try Data(contentsOf: filePath)
-            return String(data: data, encoding: .utf8)
-        } catch {
-            print("Cannot read message from file \(filePath.absoluteString): \(error)")
+    func readMessage() throws -> String? {
+        guard FileManager.default.fileExists(atPath: fileURL.path) else {
             return nil
         }
+        let data = try Data(contentsOf: fileURL)
+        return String(data: data, encoding: .utf8)
     }
 }

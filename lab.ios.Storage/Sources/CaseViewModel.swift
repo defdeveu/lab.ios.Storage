@@ -1,27 +1,40 @@
 import Foundation
-import Combine
+import Observation
 
-class CaseViewModel: ObservableObject {
-    private let caseProvider: CaseProviding
+@MainActor
+@Observable
+final class CaseViewModel {
+    private let caseProvider: any CaseProviding
 
-    private var cancellables: Set<AnyCancellable> = []
-    @Published var showAlert: Bool = false
-    @Published var alertMessage: String = ""
+    var isAlertPresented = false
+    private(set) var alertTitle = ""
+    private(set) var alertMessage = ""
 
-    init(caseProvider: CaseProviding) {
+    init(caseProvider: any CaseProviding) {
         self.caseProvider = caseProvider
-
-        self.caseProvider.messagePublisher.sink { [weak self] message in
-            self?.alertMessage = message ?? ""
-            self?.showAlert = !(message?.isEmpty ?? true)
-        }.store(in: &cancellables)
     }
 
     func save(message: String) {
-        caseProvider.save(message: message)
+        do {
+            try caseProvider.save(message: message)
+            presentAlert(title: "Saved", message: "The message was stored.")
+        } catch {
+            presentAlert(title: "Save failed", message: error.localizedDescription)
+        }
     }
 
     func readMessage() {
-        caseProvider.readMessage()
+        do {
+            let message = try caseProvider.readMessage() ?? "No stored message was found."
+            presentAlert(title: "Stored message", message: message)
+        } catch {
+            presentAlert(title: "Read failed", message: error.localizedDescription)
+        }
+    }
+
+    private func presentAlert(title: String, message: String) {
+        alertTitle = title
+        alertMessage = message
+        isAlertPresented = true
     }
 }

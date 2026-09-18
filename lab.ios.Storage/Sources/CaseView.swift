@@ -1,36 +1,48 @@
 import SwiftUI
 
 struct CaseView: View {
-    @StateObject private var viewModel: CaseViewModel
+    @State private var viewModel: CaseViewModel
     @State private var message = ""
 
     init(viewModel: CaseViewModel) {
-        self._viewModel = .init(wrappedValue: viewModel)
+        _viewModel = State(initialValue: viewModel)
     }
 
     var body: some View {
-        VStack(spacing: 20) {
-            TextField("message", text: $message)
-                .padding(.horizontal, 10)
-                .frame(height: 44)
-                .background(RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                .stroke(AppColors.textInputOverlay, lineWidth: 1))
-                .padding(.top, 50)
-                .padding(.bottom, 30)
+        @Bindable var viewModel = viewModel
+
+        VStack(alignment: .leading, spacing: 20) {
+            Text("Message")
+                .font(.headline)
+
+            TextField("Enter a message", text: $message, axis: .vertical)
+                .textInputAutocapitalization(.sentences)
+                .lineLimit(3, reservesSpace: true)
+                .padding(12)
+                .background(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .stroke(AppColors.textInputOverlay, lineWidth: 1)
+                )
 
             Button("Save") {
                 viewModel.save(message: message)
-            }.buttonStyle(SolidButtonStyle())
+            }
+            .buttonStyle(SolidButtonStyle())
+            .disabled(message.isEmpty)
 
-            Button("Read", action: viewModel.readMessage)
-                .buttonStyle(SolidButtonStyle())
+            Button("Read") {
+                viewModel.readMessage()
+            }
+            .buttonStyle(SolidButtonStyle())
 
             Spacer()
         }
-        .padding()
+        .padding(20)
         .navigationBarTitleDisplayMode(.inline)
-        .alert(isPresented: $viewModel.showAlert, content: {
-            Alert(title: Text(viewModel.alertMessage))
-        })
+        .alert(viewModel.alertTitle, isPresented: $viewModel.isAlertPresented) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(viewModel.alertMessage)
+        }
     }
 }
