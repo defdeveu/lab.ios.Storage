@@ -40,7 +40,7 @@ struct MenuView: View {
     private func appTitle() -> some ToolbarContent {
         ToolbarItem(placement: .principal) {
             HStack(spacing: 10) {
-                AppImages.appTitleImage
+                Image(.logoDddStamp1905)
                     .resizable()
                     .renderingMode(.template)
                     .scaledToFit()
