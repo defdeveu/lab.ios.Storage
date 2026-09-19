@@ -3,9 +3,8 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 100;
 	objects = {
-
 
 /* Begin PBXContainerItemProxy section */
 		FC3000000000000000000001 /* PBXContainerItemProxy */ = {
@@ -18,14 +17,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-
 		FA3CD92527BFD6650016A691 /* Storage lab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Storage lab.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-
-		FC2000000000000000000002 /* Storage labTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Storage labTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC2000000000000000000002 /* lab.ios.StorageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = lab.ios.StorageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-
 		361E4160BBF585BC5AE70D47 /* lab.ios.Storage */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = lab.ios.Storage;
@@ -36,42 +32,36 @@
 			path = lab.ios.StorageTests;
 			sourceTree = "<group>";
 		};
-
 /* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		FA3CD92227BFD6650016A691 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FC4000000000000000000001 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-
 		FA3CD91C27BFD6650016A691 = {
 			isa = PBXGroup;
 			children = (
-				361E4160BBF585BC5AE70D47,
-				7C5CCBA18F43C26F478D1DF8,
-				FA3CD92627BFD6650016A691,
+				361E4160BBF585BC5AE70D47 /* lab.ios.Storage */,
+				7C5CCBA18F43C26F478D1DF8 /* lab.ios.StorageTests */,
+				FA3CD92627BFD6650016A691 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-
 		FA3CD92627BFD6650016A691 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FA3CD92527BFD6650016A691,
-				FC2000000000000000000002,
+				FA3CD92527BFD6650016A691 /* Storage lab.app */,
+				FC2000000000000000000002 /* lab.ios.StorageTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -88,8 +78,6 @@
 				FA3CD92327BFD6650016A691 /* Resources */,
 			);
 			buildRules = (
-			);
-			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
 				361E4160BBF585BC5AE70D47 /* lab.ios.Storage */,
@@ -117,7 +105,7 @@
 			);
 			name = lab.ios.StorageTests;
 			productName = "Storage labTests";
-			productReference = FC2000000000000000000002 /* Storage labTests.xctest */;
+			productReference = FC2000000000000000000002 /* lab.ios.StorageTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -128,7 +116,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2700;
-				LastUpgradeCheck = 2700;
+				LastUpgradeCheck = 2720;
 				TargetAttributes = {
 					FA3CD92427BFD6650016A691 = {
 						CreatedOnToolsVersion = 27.0;
@@ -147,7 +135,7 @@
 				Base,
 			);
 			mainGroup = FA3CD91C27BFD6650016A691;
-			preferredProjectObjectVersion = 77;
+			preferredProjectObjectVersion = 100;
 			productRefGroup = FA3CD92627BFD6650016A691 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -161,34 +149,26 @@
 /* Begin PBXResourcesBuildPhase section */
 		FA3CD92327BFD6650016A691 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FC8000000000000000000002 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		FA3CD92127BFD6650016A691 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FC8000000000000000000001 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
@@ -201,10 +181,11 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		FA3CD93127BFD6670016A691 /* Debug */ = {
+		FA3CD93127BFD6670016A691 /* Debug configuration for PBXProject "lab.ios.Storage" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -238,6 +219,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -257,15 +239,17 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
-		FA3CD93227BFD6670016A691 /* Release */ = {
+		FA3CD93227BFD6670016A691 /* Release configuration for PBXProject "lab.ios.Storage" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -299,6 +283,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -311,17 +296,18 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		FA3CD93427BFD6670016A691 /* Debug */ = {
+		FA3CD93427BFD6670016A691 /* Debug configuration for PBXNativeTarget "lab.ios.Storage" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
@@ -350,11 +336,11 @@
 			};
 			name = Debug;
 		};
-		FA3CD93527BFD6670016A691 /* Release */ = {
+		FA3CD93527BFD6670016A691 /* Release configuration for PBXNativeTarget "lab.ios.Storage" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
@@ -383,7 +369,7 @@
 			};
 			name = Release;
 		};
-		FCA000000000000000000001 /* Debug */ = {
+		FCA000000000000000000001 /* Debug configuration for PBXNativeTarget "lab.ios.StorageTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -406,7 +392,7 @@
 			};
 			name = Debug;
 		};
-		FCA000000000000000000002 /* Release */ = {
+		FCA000000000000000000002 /* Release configuration for PBXNativeTarget "lab.ios.StorageTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -435,32 +421,28 @@
 		FA3CD92027BFD6650016A691 /* Build configuration list for PBXProject "lab.ios.Storage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FA3CD93127BFD6670016A691 /* Debug */,
-				FA3CD93227BFD6670016A691 /* Release */,
+				FA3CD93127BFD6670016A691 /* Debug configuration for PBXProject "lab.ios.Storage" */,
+				FA3CD93227BFD6670016A691 /* Release configuration for PBXProject "lab.ios.Storage" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		FA3CD93327BFD6670016A691 /* Build configuration list for PBXNativeTarget "lab.ios.Storage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FA3CD93427BFD6670016A691 /* Debug */,
-				FA3CD93527BFD6670016A691 /* Release */,
+				FA3CD93427BFD6670016A691 /* Debug configuration for PBXNativeTarget "lab.ios.Storage" */,
+				FA3CD93527BFD6670016A691 /* Release configuration for PBXNativeTarget "lab.ios.Storage" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		FC7000000000000000000001 /* Build configuration list for PBXNativeTarget "lab.ios.StorageTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FCA000000000000000000001 /* Debug */,
-				FCA000000000000000000002 /* Release */,
+				FCA000000000000000000001 /* Debug configuration for PBXNativeTarget "lab.ios.StorageTests" */,
+				FCA000000000000000000002 /* Release configuration for PBXNativeTarget "lab.ios.StorageTests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
 	};
 	rootObject = FA3CD91D27BFD6650016A691 /* Project object */;
 }
