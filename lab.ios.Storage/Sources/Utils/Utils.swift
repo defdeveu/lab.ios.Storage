@@ -62,9 +62,3 @@ enum AppColors {
 enum AppStrings {
     static let appTitle = "STORAGE LAB"
 }
-
-// MARK: - Images
-
-enum AppImages {
-    static let appTitleImage = Image("logo.ddd.stamp.1905")
-}

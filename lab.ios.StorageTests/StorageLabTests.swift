@@ -1,47 +1,53 @@
 import CoreData
 import Foundation
 import Security
-import XCTest
+import Testing
 @testable import lab_ios_Storage
 
 @MainActor
-final class CaseViewModelTests: XCTestCase {
-    func testSaveDelegatesAndPresentsConfirmation() {
+@Suite
+struct CaseViewModelTests {
+    @Test
+    func saveDelegatesAndPresentsConfirmation() {
         let provider = RecordingCaseProvider()
         let viewModel = CaseViewModel(caseProvider: provider)
 
         viewModel.save(message: "Stored message")
 
-        XCTAssertEqual(provider.savedMessages, ["Stored message"])
-        XCTAssertEqual(viewModel.alertTitle, "Saved")
-        XCTAssertTrue(viewModel.isAlertPresented)
+        #expect(provider.savedMessages == ["Stored message"])
+        #expect(viewModel.alertTitle == "Saved")
+        #expect(viewModel.isAlertPresented)
     }
 
-    func testReadPresentsStoredMessage() {
+    @Test
+    func readPresentsStoredMessage() {
         let provider = RecordingCaseProvider(storedMessage: "Recovered message")
         let viewModel = CaseViewModel(caseProvider: provider)
 
         viewModel.readMessage()
 
-        XCTAssertEqual(viewModel.alertTitle, "Stored message")
-        XCTAssertEqual(viewModel.alertMessage, "Recovered message")
-        XCTAssertTrue(viewModel.isAlertPresented)
+        #expect(viewModel.alertTitle == "Stored message")
+        #expect(viewModel.alertMessage == "Recovered message")
+        #expect(viewModel.isAlertPresented)
     }
 
-    func testFailureIsPresentedWithoutCrashing() {
+    @Test
+    func failureIsPresentedWithoutCrashing() {
         let provider = RecordingCaseProvider(error: TestError.failed)
         let viewModel = CaseViewModel(caseProvider: provider)
 
         viewModel.save(message: "message")
 
-        XCTAssertEqual(viewModel.alertTitle, "Save failed")
-        XCTAssertEqual(viewModel.alertMessage, TestError.failed.localizedDescription)
+        #expect(viewModel.alertTitle == "Save failed")
+        #expect(viewModel.alertMessage == TestError.failed.localizedDescription)
     }
 }
 
 @MainActor
-final class SandboxDirectoryServiceTests: XCTestCase {
-    func testRoundTripsUTF8Message() throws {
+@Suite
+struct SandboxDirectoryServiceTests {
+    @Test
+    func roundTripsUTF8Message() throws {
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
         try FileManager.default.createDirectory(
@@ -53,41 +59,40 @@ final class SandboxDirectoryServiceTests: XCTestCase {
         let service = SandboxDirectoryService(directory: directory)
         try service.save(message: "Árvíztűrő tükörfúrógép")
 
-        XCTAssertEqual(try service.readMessage(), "Árvíztűrő tükörfúrógép")
+        #expect(try service.readMessage() == "Árvíztűrő tükörfúrógép")
     }
 
-    func testMissingFileReturnsNil() throws {
+    @Test
+    func missingFileReturnsNil() throws {
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
         let service = SandboxDirectoryService(directory: directory)
 
-        XCTAssertNil(try service.readMessage())
+        #expect(try service.readMessage() == nil)
     }
 
-    func testSolutionAddsCompleteProtectionToFileWrites() {
-        XCTAssertEqual(
-            SandboxDirectoryService.writeOptions,
-            [.atomic, .completeFileProtection]
-        )
+    @Test
+    func solutionAddsCompleteProtectionToFileWrites() {
+        #expect(SandboxDirectoryService.writeOptions == [.atomic, .completeFileProtection])
     }
 }
 
-final class StoragePolicyTests: XCTestCase {
-    func testSolutionUsesCompleteProtectionForPersistentStore() {
+@Suite
+struct StoragePolicyTests {
+    @Test
+    func solutionUsesCompleteProtectionForPersistentStore() {
         let description = NSPersistentStoreDescription()
 
         PersistentStorePolicy.configure(description)
 
-        XCTAssertEqual(
-            description.options[NSPersistentStoreFileProtectionKey] as? String,
-            FileProtectionType.complete.rawValue
-        )
+        #expect(description.options[NSPersistentStoreFileProtectionKey] as? String == FileProtectionType.complete.rawValue)
     }
 
-    func testSolutionUsesDeviceOnlyKeychainAccessibilityInSimulator() {
+    @Test
+    func solutionUsesDeviceOnlyKeychainAccessibilityInSimulator() {
         let accessibility = KeychainPolicy.storageAttributes[kSecAttrAccessible] as? String
 
-        XCTAssertEqual(accessibility, kSecAttrAccessibleWhenUnlockedThisDeviceOnly as String)
+        #expect(accessibility == kSecAttrAccessibleWhenUnlockedThisDeviceOnly as String)
     }
 }
 
